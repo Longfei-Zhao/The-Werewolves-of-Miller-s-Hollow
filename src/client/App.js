@@ -12,7 +12,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import GameBoard from './component/GameBoard';
-
+import SocketIOClient from "socket.io-client";
 
 const emptyPlayer = {
   name: null,
@@ -43,9 +43,6 @@ export default class App extends React.Component {
       players: emptyPlayers
     };
   }
-
-  // const [open, setOpen] = React.useState(false);
-  // const [playerId, setPlayerId] = React.useState(0);
 
   handleSitHereButtonClick = (e, id) => {
     let players = [...this.state.players];
@@ -97,6 +94,7 @@ export default class App extends React.Component {
   }
 
   render() {
+    const socket = SocketIOClient('localhost:8080');
     return (
       <div>
         <AppBar position="static" color="primary">
@@ -148,10 +146,6 @@ export default class App extends React.Component {
                     </Button>
           </DialogActions>
         </Dialog>
-
-        {/* {this.state.players.map(player =>
-                    <Player key={player.id} id={player.id} handleClickOpen={this.handleClickOpen} />)
-                } */}
         <GameBoard
           id={this.state.id}
           players={this.state.players}
