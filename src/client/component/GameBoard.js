@@ -7,17 +7,19 @@ import Player from './Player';
 class GameBoard extends React.Component {
 
   render() {
+    let {players, prepared} = this.props
     return (
       <Container maxWidth='lg'>
         <Typography variant="h6" component="h6" gutterBottom>
           Room number:
         </Typography>
         <Grid container spacing={2}>
-          {this.props.players.map(player =>
-            <Grid item xs={6}>
+          {players.map((player, index) =>
+            <Grid item xs={6} key={index}>
               <Player
-                id={this.props.id}
+                id={index}
                 player={player}
+                prepared={prepared}
                 handleSitHereButtonClick={this.props.handleSitHereButtonClick}
                 handleStandUpButtonClick={this.props.handleStandUpButtonClick} />
             </Grid>

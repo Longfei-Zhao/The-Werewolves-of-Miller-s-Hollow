@@ -8,9 +8,7 @@
     "start": "node src/server/index.js",
     "client": "webpack-dev-server --mode development --devtool inline-source-map --hot",
     "server": "nodemon src/server/index.js",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "bundle": "webpack --config webpack.config.js",
-    "prestart": "npm run bundle"
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Longfei Zhao",
   "license": "ISC",

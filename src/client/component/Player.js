@@ -18,7 +18,7 @@ class Player extends React.Component {
   }
 
   handleSitHereButtonClick = (e) => {
-    this.props.handleSitHereButtonClick(e, this.props.player.id)
+    this.props.handleSitHereButtonClick(e, this.props.id)
   }
 
   handleStandUpButtonClick = () => {
@@ -26,13 +26,19 @@ class Player extends React.Component {
   }
 
   render() {
-    const { id, name, whatsup } = this.props.player
+    const {
+      player: {
+        name,
+        whatsup
+      },
+      prepared
+    } = this.props
     return (
       <Card variant="contained" color="default">
         <CardContent>
           <Avatar alt="avatar" src={defaultAvatar} />
           <Typography variant="h6" gutterBottom>
-            #{id}
+            #{this.props.id}
           </Typography>
           <Typography variant="h6" gutterBottom>
             {name ? name : 'Empty'}
@@ -47,18 +53,15 @@ class Player extends React.Component {
           }
         </CardContent>
 
-        <CardActions>
-          {this.props.id !== this.props.player.id ? 
+
+        {!prepared && !name &&
+          <CardActions>
             <Button size="small" onClick={this.handleSitHereButtonClick}>
               Sit here
-            </Button> : 
-            <Button size="small" onClick={this.handleStandUpButtonClick} color="secondary">
-              Stand up
             </Button>
-          }
-        </CardActions>
+          </CardActions>
+        }
       </Card>
-
     );
   }
 }

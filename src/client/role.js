@@ -1,0 +1,1 @@
+export default ['Werewolves', 'Villagers', 'Seer', 'Hunter', 'Witch', 'Idiot'];
