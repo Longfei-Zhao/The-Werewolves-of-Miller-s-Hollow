@@ -4,7 +4,9 @@ import Header from './component/Header';
 import GameBoard from './component/GameBoard';
 import UserInfoDialog from './component/UserInfoDialog';
 import SocketIOClient from "socket.io-client";
-const socket = SocketIOClient('localhost:8080');
+import Sound from 'react-sound';
+// import soundTest from './sound/hello.mp3';
+const socket = SocketIOClient();
 
 export default class App extends React.Component {
   constructor(props) {
@@ -94,6 +96,9 @@ export default class App extends React.Component {
           prepared={prepared}
           handleSitHereButtonClick={this.handleSitHereButtonClick}
           handleStandUpButtonClick={this.handleStandUpButtonClick} />
+        <Sound
+          url={'./src/client/sound/hello.mp3'}
+          playStatus={Sound.status.PLAYING} />
       </div>
     )
   }
