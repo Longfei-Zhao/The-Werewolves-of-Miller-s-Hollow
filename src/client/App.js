@@ -3,102 +3,102 @@ import 'typeface-roboto';
 import Header from './component/Header';
 import GameBoard from './component/GameBoard';
 import UserInfoDialog from './component/UserInfoDialog';
-import SocketIOClient from "socket.io-client";
-import Sound from 'react-sound';
-// import soundTest from './sound/hello.mp3';
-const socket = SocketIOClient();
+import SoundCompoent from './component/SoundCompoent';
+import Snackbar from '@material-ui/core/Snackbar';
+import gameStatus from './gameStatus';
+import io from "socket.io-client";
+const socket = io('http://localhost:8080');
 
 export default class App extends React.Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      id: null,
-      name: '',
-      whatsup: '',
-      open: true,
-      prepared: false,
-      players: []
-    };
+  state = {
+    roomId: null,
+    playerId: null,
+    open: true,
+    players: [],
+    gameOn: false,
+    hunted: false
   }
 
   componentDidMount() {
-    fetch('/api/getPlayers')
+    fetch('/api/init')
       .then(res => res.json())
       .then(res => {
-        let {players, roles} = res;
+        let { players, roles } = res;
         this.roles = roles;
         this.setState({ players });
       })
     socket.on('updatePlayers', players => this.setState({ players }));
-  }
-
-  handleSitHereButtonClick = (e, id) => {
-    let { name, whatsup } = this.state;
-    this.setState({
-      prepared: true,
-      id
+    socket.on('gameOn', () => {
+      this.setState({ gameOn: true })
     })
-    socket.emit('sit', id, name, whatsup);
   }
 
-  handleStandUpButtonClick = () => {
-    let players = [...this.state.players];
-    players[this.state.id] = { ...emptyPlayer, id: this.state.id };
-    this.setState({
-      id: null,
-      players
-    });
+  handleSitHereButtonClick = (e, playerId) => {
+    this.setState({ playerId })
+    socket.emit('sit', playerId);
   }
 
-  handleChangeInfoButtonClick = () => {
-    this.setState({ open: true });
-  }
+  // handleStandUpButtonClick = () => {
+  //   let players = [...this.state.players];
+  //   players[this.state.id] = { ...emptyPlayer, id: this.state.id };
+  //   this.setState({
+  //     id: null,
+  //     players
+  //   });
+  // }
 
-  handleDialogOkButtonClick = () => {
+  // handleChangeInfoButtonClick = () => {
+  //   this.setState({ open: true });
+  // }
 
-  }
+  // handleDialogOkButtonClick = () => {
+
+  // }
 
   handleClose = () => {
     this.setState({ open: false });
   }
 
-  handleNameTextFieldChange = (e) => {
+  handleJoinRoomButton = (roomId, name, whatsup) => {
+    socket.emit('joinRoom', roomId, name, whatsup)
     this.setState({
-      name: e.target.value
-    })
-  }
-
-  handleWhatsupTextFieldChange = (e) => {
-    this.setState({
-      whatsup: e.target.value
+      open: false,
+      roomId
     })
   }
 
   render() {
-    let { id, open, name, whatsup, prepared, players } = this.state
+    let {
+      playerId,
+      open,
+      prepared,
+      players,
+      roomId
+    } = this.state
+
     return (
       <div>
         <Header
-          id={id}
+          playerId={playerId}
           role={this.roles}
           handleChangeInfoButtonClick={this.handleChangeInfoButtonClick} />
         <UserInfoDialog
           open={open}
-          name={name}
-          whatsup={whatsup}
           handleClose={this.handleClose}
-          handleNameTextFieldChange={this.handleNameTextFieldChange}
-          handleWhatsupTextFieldChange={this.handleWhatsupTextFieldChange} />
+          handleJoinRoomButton={this.handleJoinRoomButton} />
         <GameBoard
-          id={id}
+          playerId={playerId}
           players={players}
           prepared={prepared}
+          roomId={roomId}
           handleSitHereButtonClick={this.handleSitHereButtonClick}
           handleStandUpButtonClick={this.handleStandUpButtonClick} />
-        <Sound
-          url={'./src/client/sound/hello.mp3'}
-          playStatus={Sound.status.PLAYING} />
+        <SoundCompoent gameOn={this.state.gameOn} />
+        <Snackbar
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          open={true}
+          message='Test' />
       </div>
     )
   }

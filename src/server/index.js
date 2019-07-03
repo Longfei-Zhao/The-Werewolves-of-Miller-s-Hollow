@@ -1,9 +1,12 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 8080;
-const roles = require('./util');
 const server = require('http').Server(app);
-
+const io = require('socket.io')(server);
+const PORT = process.env.PORT || 8080;
+const chalk = require('chalk');
+const roles = require('./util');
+const gameStatus = require('./gameStatus');
+ 
 
 let players = [];
 for (let i = 0; i < 12; i++) {
@@ -13,23 +16,41 @@ for (let i = 0; i < 12; i++) {
         prepared: false
     })
 }
+let rooms = []
 
 app.use(express.static('dist'));
-app.get('/api/getPlayers', (req, res) => res.send({ players, roles }));
+app.get('/api/init', (req, res) => res.send({ players, roles }));
 // const server = app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
-const io = require('socket.io')(server);
+
 io.on('connection', socket => {
-    console.log('user connected');
-    socket.on('sit', (id, name, whatsup) => {
-        players[id] = {name, whatsup, prepared: true};
-        io.emit('updatePlayers', players);
+    let userId = socket.id;
+    console.log('User ' + chalk.blue(userId) + ' connected');
+
+    socket.on('joinRoom', (roomId, name, whatsup) => {
+        socket.roomId = roomId;
+        socket.name = name;
+        socket.whatsup = whatsup;
+        console.log('User ' + chalk.blue(userId) + ' name is ' + chalk.blue(socket.name));
+        socket.join(roomId, () => {
+            console.log('User ' + chalk.blue(socket.name) + ' Join room ' + chalk.green(roomId))
+        });  
+    })
+
+    socket.on('sit', (playerId) => {
+        console.log(chalk.blue(socket.name) + ' choose the position ' + chalk.green(playerId))
+        players[playerId] = {
+            name: socket.name, 
+            whatsup: socket.whatsup, 
+            prepared: true
+        };
+        io.to(socket.roomId).emit('updatePlayers', players);
         if (players.every(player => player.prepared)) {
-
-
+            console.log('Game start...');
+            io.emit('gameOn', )
         }
     })
     socket.on('disconnect', () => {
-        console.log('user disconected');
+        console.log('User ' + chalk.blue(userId) + ' disconnected');
     })
 })
 server.listen(PORT, () => {
