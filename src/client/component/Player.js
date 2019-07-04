@@ -29,9 +29,10 @@ class Player extends React.Component {
     const {
       player: {
         name,
-        whatsup
+        whatsup,
+        prepared
       },
-      prepared
+      playerId
     } = this.props
     return (
       <Card variant="contained" color="default">
@@ -54,7 +55,7 @@ class Player extends React.Component {
         </CardContent>
 
 
-        {!prepared && !name &&
+        { playerId === null && !prepared &&
           <CardActions>
             <Button size="small" onClick={this.handleSitHereButtonClick}>
               Sit here

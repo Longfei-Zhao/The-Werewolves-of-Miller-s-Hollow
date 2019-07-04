@@ -6,7 +6,7 @@ export default class SoundCompoent extends React.Component {
     render() {
         return (
             (
-                this.props.gameOn && 
+                true && 
                 <Sound
                     url={Sound1}
                     playStatus={Sound.status.PLAYING} />

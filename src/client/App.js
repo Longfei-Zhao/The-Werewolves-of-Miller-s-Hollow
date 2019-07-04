@@ -6,8 +6,8 @@ import UserInfoDialog from './component/UserInfoDialog';
 import SoundCompoent from './component/SoundCompoent';
 import Snackbar from '@material-ui/core/Snackbar';
 import gameStatus from './gameStatus';
-import io from "socket.io-client";
-const socket = io('http://localhost:8080');
+import SocketIOClient from "socket.io-client";
+const socket = SocketIOClient('localhost:8080');
 
 export default class App extends React.Component {
 
@@ -16,18 +16,25 @@ export default class App extends React.Component {
     playerId: null,
     open: true,
     players: [],
-    gameOn: false,
-    hunted: false
+    roles: [],
+    status: null
   }
 
   componentDidMount() {
     fetch('/api/init')
       .then(res => res.json())
       .then(res => {
-        let { players, roles } = res;
-        this.roles = roles;
-        this.setState({ players });
+        let { emptyPlayers } = res;
+        this.setState({ players: emptyPlayers });
       })
+    socket.on('updateRoomInfo', roomInfo => {
+      let {players, roles, status} = roomInfo;
+      this.setState({
+        players,
+        roles,
+        status
+      })
+    })
     socket.on('updatePlayers', players => this.setState({ players }));
     socket.on('gameOn', () => {
       this.setState({ gameOn: true })
@@ -90,7 +97,6 @@ export default class App extends React.Component {
         <GameBoard
           playerId={playerId}
           players={players}
-          prepared={prepared}
           roomId={roomId}
           handleSitHereButtonClick={this.handleSitHereButtonClick}
           handleStandUpButtonClick={this.handleStandUpButtonClick} />

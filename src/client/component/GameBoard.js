@@ -7,7 +7,7 @@ import Player from './Player';
 class GameBoard extends React.Component {
 
   render() {
-    let { players, prepared, roomId } = this.props
+    let { players, playerId, roomId } = this.props
     return (
       <Container maxWidth='lg'>
         <Typography variant="h6" component="h6" gutterBottom>
@@ -19,7 +19,7 @@ class GameBoard extends React.Component {
               <Player
                 id={index}
                 player={player}
-                prepared={prepared}
+                playerId={playerId}
                 handleSitHereButtonClick={this.props.handleSitHereButtonClick}
                 handleStandUpButtonClick={this.props.handleStandUpButtonClick} />
             </Grid>

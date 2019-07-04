@@ -1,4 +1,5 @@
 const status = {
+    PREPARING: 'preparing',
     START: 'start',
     WEREWOLF: 'werewolf',
     SEER: 'seer',
