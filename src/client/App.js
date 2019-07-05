@@ -14,35 +14,38 @@ export default class App extends React.Component {
   state = {
     roomId: null,
     playerId: null,
+    prepared: false,
     open: true,
     players: [],
     roles: [],
-    status: null
+    gameStatus: null
   }
 
   componentDidMount() {
     fetch('/api/init')
       .then(res => res.json())
       .then(res => {
-        let { emptyPlayers } = res;
-        this.setState({ players: emptyPlayers });
+        let { players } = res;
+        this.setState({ players });
       })
     socket.on('updateRoomInfo', roomInfo => {
-      let {players, roles, status} = roomInfo;
+      let { players, roles, status } = roomInfo;
       this.setState({
         players,
         roles,
         status
       })
     })
+
     socket.on('updatePlayers', players => this.setState({ players }));
-    socket.on('gameOn', () => {
-      this.setState({ gameOn: true })
+    socket.on('updateGameStatus', (gameStatus) => {
+      this.setState({ gameStatus })
     })
   }
 
   handleSitHereButtonClick = (e, playerId) => {
-    this.setState({ playerId })
+    console.log(1)
+    this.setState({ playerId }) 
     socket.emit('sit', playerId);
   }
 
@@ -78,8 +81,9 @@ export default class App extends React.Component {
   render() {
     let {
       playerId,
+      gameStatus,
       open,
-      prepared,
+      roles,
       players,
       roomId
     } = this.state
@@ -88,8 +92,7 @@ export default class App extends React.Component {
       <div>
         <Header
           playerId={playerId}
-          role={this.roles}
-          handleChangeInfoButtonClick={this.handleChangeInfoButtonClick} />
+          roles={roles} />
         <UserInfoDialog
           open={open}
           handleClose={this.handleClose}
@@ -100,7 +103,8 @@ export default class App extends React.Component {
           roomId={roomId}
           handleSitHereButtonClick={this.handleSitHereButtonClick}
           handleStandUpButtonClick={this.handleStandUpButtonClick} />
-        <SoundCompoent gameOn={this.state.gameOn} />
+        <SoundCompoent
+          gameStatus={gameStatus} />
         <Snackbar
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           open={true}

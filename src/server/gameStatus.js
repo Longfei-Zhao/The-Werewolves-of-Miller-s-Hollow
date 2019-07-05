@@ -1,4 +1,4 @@
-const status = {
+const GAMESTATUS = {
     PREPARING: 'preparing',
     START: 'start',
     WEREWOLF: 'werewolf',
@@ -7,4 +7,4 @@ const status = {
     FINISH: 'finish'
 }
 
-module.exports = status
+module.exports = GAMESTATUS

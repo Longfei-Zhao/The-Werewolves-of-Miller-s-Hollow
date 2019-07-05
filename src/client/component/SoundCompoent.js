@@ -1,17 +1,35 @@
 import React from 'react';
 import Sound from 'react-sound';
 import Sound1 from '../sound/1.mp3';
+import GAMESTATUS from '../gameStatus';
 
 export default class SoundCompoent extends React.Component {
+
     render() {
-        return (
-            (
-                true && 
-                <Sound
+        let { gameStatus } = this.props
+        switch (gameStatus) {
+            case GAMESTATUS.START:
+                return <Sound
                     url={Sound1}
                     playStatus={Sound.status.PLAYING} />
-            )
+            default:
+                return null
+        }
+        // return (
+        //     ( switch(gameStatus) {
+        //         case GAMESTATUS.START:
+        //                 return <Sound
+        //                         url={Sound1}
+        //                         playStatus={Sound.status.PLAYING} />
+        //     })
+        //     // { renderSwitch(gameStatus) }
+        //     // (
+        //     //     true && 
+        //     //     <Sound
+        //     //         url={Sound1}
+        //     //         playStatus={Sound.status.PLAYING} />
+        //     // )
 
-        )
+        // )
     }
 }
