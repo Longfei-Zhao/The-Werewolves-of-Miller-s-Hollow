@@ -9,31 +9,23 @@ import Operation from './Operation';
 
 class Player extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
+    state = {
 
-        };
-    }
-
-    handleSitHereButtonClick = (e) => {
-        this.props.handleSitHereButtonClick(e, this.props.id)
-    }
-
-    handleStandUpButtonClick = () => {
-        this.props.handleStandUpButtonClick()
-    }
+    };
 
     render() {
         const {
             player: {
                 name,
                 whatsup,
-                prepared
+                prepared,
+                status
             },
             playerId,
-            id
+            id,
+            operation
         } = this.props
+
         return (
             <Card variant="contained" color="default">
                 <CardContent>
@@ -47,12 +39,18 @@ class Player extends React.Component {
                     <Typography variant="body1" gutterBottom>
                         {whatsup ? whatsup : "What's up..."}
                     </Typography>
+                    <Typography variant="body1" gutterBottom>
+                        {status ? status : ""}
+                    </Typography>
                 </CardContent>
                 <Operation
                     id={id}
+                    status={status}
                     playerId={playerId}
                     prepared={prepared}
-                    handleSitHereButtonClick={this.props.handleSitHereButtonClick} />
+                    operation={operation}
+                    handleSitHereButtonClick={this.props.handleSitHereButtonClick}
+                    handleOperationButtonClick={this.props.handleOperationButtonClick} />
             </Card>
         );
     }

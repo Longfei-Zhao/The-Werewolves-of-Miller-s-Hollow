@@ -31,13 +31,46 @@ io.on('connection', socket => {
     socket.on('sit', (playerId) => {
         socket.playerId = playerId;
         console.log(chalk.blue(socket.name) + ' choose the position ' + chalk.green(playerId))
-        let roomId = socket.roomId;
+        const roomId = socket.roomId;
         util.sit(roomId, playerId, socket.name, socket.whatsup);
         io.to(roomId).emit('updatePlayers', util.getPlayers(roomId));
-        if ( util.checkGameStart(roomId)) {
+        if (util.checkGameStart(roomId)) {
             console.log('Game start...');
-            io.emit('updateGameStatus', GAMESTATUS.START);
+            io.to(roomId).emit('updateGameStatus', GAMESTATUS.START);
         }
+    })
+
+    socket.on('updateGameStatus', (gameStatus, playerId, mode) => {
+        const roomId = socket.roomId;
+        switch (gameStatus) {
+            case GAMESTATUS.WEREWOLF_MOVED:
+                util.killPlayer(roomId, playerId);
+                io.to(roomId).emit('updatePlayers', util.getPlayers(roomId));
+                io.to(roomId).emit('updateGameStatus', GAMESTATUS.SEER_MOVE);
+                break;
+            case GAMESTATUS.SEER_MOVED:
+                io.to(roomId).emit('updateGameStatus', GAMESTATUS.WITCH_MOVE);
+                break
+            case GAMESTATUS.WITCH_MOVED:
+                mode ? util.savePlayer(roomId, playerId) : util.killPlayer(roomId, playerId);
+                io.to(roomId).emit('updatePlayers', util.getPlayers(roomId));
+                io.to(roomId).emit('updateGameStatus', GAMESTATUS.FINISH);
+        }
+    })
+
+    socket.on(GAMESTATUS.WEREWOLF_MOVED, () => {
+        const roomId = socket.roomId;
+        io.to(roomId).emit(GAMESTATUS.SEER_MOVE)
+    })
+
+    socket.on(GAMESTATUS.SEER_MOVED, () => {
+        const roomId = socket.roomId;
+        io.to(roomId).emit(GAMESTATUS.WITCH_MOVE)
+    })
+
+    socket.on(GAMESTATUS.WITCH_MOVED, () => {
+        const roomId = socket.roomId;
+        io.to(roomId).emit(GAMESTATUS.FINISH)
     })
 
     // socket.on('prepared', () => {

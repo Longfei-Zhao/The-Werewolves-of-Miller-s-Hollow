@@ -17,7 +17,7 @@ export default class Header extends React.Component {
 
     render() {
         let { roleHidden } = this.state
-        let { playerId, roles } = this.props
+        let { role } = this.props
         
         return (
             <AppBar position="static" color="primary">
@@ -25,9 +25,9 @@ export default class Header extends React.Component {
                     <IconButton edge="start" color="inherit" aria-label="Menu">
                         <MenuIcon />
                     </IconButton>
-                    {playerId !== null &&
+                    {role &&
                         <Button color="inherit" onClick={this.handleRoleButtonClick}>
-                            {roleHidden ? 'Role' : roles[playerId]}
+                            {roleHidden ? 'Role' : role}
                         </Button>
                     }
                 </Toolbar>

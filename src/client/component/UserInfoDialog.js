@@ -73,7 +73,9 @@ export default class UserInfoDialog extends React.Component {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.handleJoinRoomButton} color="primary">
+                    <Button
+                        onClick={this.handleJoinRoomButton}
+                        color="primary">
                         Join room
                     </Button>
                 </DialogActions>
