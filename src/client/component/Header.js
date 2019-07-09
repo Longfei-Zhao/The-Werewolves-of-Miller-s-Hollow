@@ -7,16 +7,7 @@ import Button from '@material-ui/core/Button';
 
 export default class Header extends React.Component {
 
-    state = {
-        roleHidden: true
-    };
-
-    handleRoleButtonClick = () => {
-        this.setState(prevState => ({ roleHidden: !prevState.roleHidden }))
-    }
-
     render() {
-        let { roleHidden } = this.state
         let { role } = this.props
         
         return (
@@ -26,8 +17,8 @@ export default class Header extends React.Component {
                         <MenuIcon />
                     </IconButton>
                     {role &&
-                        <Button color="inherit" onClick={this.handleRoleButtonClick}>
-                            {roleHidden ? 'Role' : role}
+                        <Button color="inherit" onClick={this.props.handleRoleButtonClick}>
+                            Role
                         </Button>
                     }
                 </Toolbar>

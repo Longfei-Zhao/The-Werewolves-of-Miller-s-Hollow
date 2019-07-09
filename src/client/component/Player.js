@@ -5,7 +5,9 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Operation from './Operation';
-
+import '../css/common.css';
+import bloodImg from '../image/blood.png';
+import { PLAYERSTATUS } from '../util';
 
 class Player extends React.Component {
 
@@ -22,34 +24,42 @@ class Player extends React.Component {
                 status
             },
             playerId,
-            id,
+            seatId,
             operation
         } = this.props
 
         return (
-            <Card variant="contained" color="default">
-                <CardContent>
-                    <Avatar alt="avatar" src={defaultAvatar} />
-                    <Typography variant="h6" gutterBottom>
-                        #{id}
+            <Card
+                className='card'
+                variant="contained"
+                color="default">
+                {
+                    status === PLAYERSTATUS.DEAD &&
+                    <img className='dead' src={bloodImg} />
+                }
+                <CardContent className='cardContent'>
+                    <Typography
+                        variant="h6"
+                    >
+                        #{seatId}
                     </Typography>
-                    <Typography variant="h6" gutterBottom>
+                    <Avatar alt="avatar" src={defaultAvatar} />
+                    <Typography variant="body1">
                         {name ? name : 'Empty'}
                     </Typography>
-                    <Typography variant="body1" gutterBottom>
+                    <Typography variant="body2">
                         {whatsup ? whatsup : "What's up..."}
                     </Typography>
-                    <Typography variant="body1" gutterBottom>
+                    {/* <Typography variant="body1" gutterBottom>
                         {status ? status : ""}
-                    </Typography>
+                    </Typography> */}
                 </CardContent>
                 <Operation
-                    id={id}
+                    seatId={seatId}
                     status={status}
                     playerId={playerId}
                     prepared={prepared}
                     operation={operation}
-                    handleSitHereButtonClick={this.props.handleSitHereButtonClick}
                     handleOperationButtonClick={this.props.handleOperationButtonClick} />
             </Card>
         );

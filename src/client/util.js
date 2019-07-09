@@ -32,3 +32,18 @@ export const OPERATION_TYPE = {
     SAVE: 'save',
     POISON: 'poison'
 }
+
+import WEREWOLF from './image/roles/werewolf.jpg';
+import SEER from './image/roles/seer.jpg';
+import WITCH from './image/roles/witch.jpg';
+import HUNTER from './image/roles/hunter.jpg';
+import IDIOT from './image/roles/idiot.jpg';
+import VILLAGER from './image/roles/villager.jpg';
+export const ROLE_IMAGE = {
+    WEREWOLF,
+    SEER,
+    WITCH,
+    HUNTER,
+    IDIOT,
+    VILLAGER
+};

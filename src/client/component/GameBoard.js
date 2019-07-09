@@ -19,14 +19,13 @@ class GameBoard extends React.Component {
                     Room ID: {roomId}
                 </Typography>
                 <Grid container spacing={2}>
-                    {players.length > 0 && players.map((player, index) =>
-                        <Grid item xs={6} key={index}>
+                    {players.length > 0 && players.map((player, seatId) =>
+                        <Grid item xs={6} key={seatId}>
                             <Player
-                                id={index}
+                                seatId={seatId}
                                 player={player}
                                 playerId={playerId}
                                 operation={operation}
-                                handleSitHereButtonClick={this.props.handleSitHereButtonClick}
                                 handleOperationButtonClick={this.props.handleOperationButtonClick} />
                         </Grid>
                     )}

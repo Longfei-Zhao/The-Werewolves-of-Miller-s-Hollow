@@ -3,16 +3,18 @@ import 'typeface-roboto';
 import Header from './component/Header';
 import GameBoard from './component/GameBoard';
 import UserInfoDialog from './component/UserInfoDialog';
+import RoleDialog from './component/RoleDialog';
 import SoundCompoent from './component/SoundCompoent';
 import Snackbar from '@material-ui/core/Snackbar';
 import SocketIOClient from "socket.io-client";
+
 import {
     GAMESTATUS,
     ROLE,
     PLAYERSTATUS,
-    OPERATION_TYPE
+    OPERATION_TYPE,
+    ROLE_IMAGE
 } from './util';
-import Operation from './component/Operation';
 const socket = SocketIOClient('localhost:8080');
 
 export default class App extends React.Component {
@@ -21,7 +23,8 @@ export default class App extends React.Component {
         roomId: null,
         playerId: null,
         prepared: false,
-        open: true,
+        userInfoDialogOpen: true,
+        roleDialogOpen: false,
         players: [],
         roles: [],
         gameStatus: null,
@@ -55,35 +58,21 @@ export default class App extends React.Component {
     handleJoinRoomButton = (roomId, name, whatsup) => {
         socket.emit('joinRoom', roomId, name, whatsup)
         this.setState({
-            open: false,
+            userInfoDialogOpen: false,
             roomId
         })
     }
 
-    // handleKillButtonClick = (e, playerId) => {
-    //     socket.emit('updateGameStatus', GAMESTATUS.WEREWOLF_MOVED, playerId)
-    // }
+    handleRoleButtonClick = () => {
+        this.setState({
 
-    // handleSeeButtonClick = (e, playerId) => {
-    //     const message = `Player ${playerId} is a ${this.state.roles[playerId] === ROLE.WEREWOLF ? 'BAD' : 'GOOD'} people.`
-    //     this.setState({
-    //         snackbarOpen: true,
-    //         message
-    //     })
-    //     socket.emit('updateGameStatus', GAMESTATUS.SEER_MOVED)
-    // }
-
-    // handleSaveButtonClick = (e, playerId) => {
-    //     socket.emit('updateGameStatus', GAMESTATUS.WITCH_MOVED, playerId, true)
-    // }
-
-    // handlePoisonButtonClick = (e, playerId) => {
-    //     socket.emit('updateGameStatus', GAMESTATUS.WITCH_MOVED, playerId, false)
-    // }
+        })
+    }
 
     handleOperationButtonClick = (e, operation, playerId) => {
         switch (operation) {
             case OPERATION_TYPE.SIT:
+                console.log(1)
                 this.setState({ playerId });
                 socket.emit('sit', playerId);
                 break;
@@ -111,7 +100,8 @@ export default class App extends React.Component {
         let {
             playerId,
             gameStatus,
-            open,
+            userInfoDialogOpen,
+            roleDialogOpen,
             roles,
             players,
             roomId,
@@ -146,24 +136,28 @@ export default class App extends React.Component {
         return (
             <div>
                 <Header
-                    role={role} />
+                    role={role}
+                    handleRoleButtonClick={() => this.setState({ roleDialogOpen: true })} />
+                <RoleDialog
+                    role={role}
+                    open={roleDialogOpen}
+                    onClose={() => this.setState({ roleDialogOpen: false })} />
                 <UserInfoDialog
-                    open={open}
-                    handleClose={this.handleClose}
+                    open={userInfoDialogOpen}
                     handleJoinRoomButton={this.handleJoinRoomButton} />
                 <GameBoard
                     playerId={playerId}
                     players={players}
                     roomId={roomId}
                     operation={operation}
-                    handleSitHereButtonClick={this.handleSitHereButtonClick}
                     handleOperationButtonClick={this.handleOperationButtonClick} />
                 {/* <SoundCompoent
                     gameStatus={gameStatus} /> */}
                 <Snackbar
                     anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                     open={snackbarOpen}
-                    autoHideDuration={3000}
+                    autoHideDuration={2000}
+                    onClose={()=>{this.setState({snackbarOpen: false})}}
                     message={message} />
             </div>
         )

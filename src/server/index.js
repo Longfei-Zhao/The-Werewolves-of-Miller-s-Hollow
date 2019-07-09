@@ -35,7 +35,7 @@ io.on('connection', socket => {
         util.sit(roomId, playerId, socket.name, socket.whatsup);
         io.to(roomId).emit('updatePlayers', util.getPlayers(roomId));
         if (util.checkGameStart(roomId)) {
-            console.log('Game start...');
+            console.log(chalk.bgGreen('Game start...'));
             io.to(roomId).emit('updateGameStatus', GAMESTATUS.START);
         }
     })

@@ -1,8 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import CardActions from '@material-ui/core/CardActions';
-import GAMESTATUS from '../gameStatus';
-import ROLE from '../role';
 import { OPERATION_TYPE } from '../util';
 const PLAYERSTATUS = {
     ALIVE: 'alive',
@@ -67,12 +65,12 @@ class Operation extends React.Component {
     // }
 
     handleOperationButtonClick = (e) => {
-        this.props.handleOperationButtonClick(e, this.props.operation, this.props.id)
+        this.props.handleOperationButtonClick(e, this.props.operation, this.props.seatId)
     }
 
     render() {
         let {
-            id,
+            seatId,
             playerId,
             prepared,
             status,
@@ -85,7 +83,7 @@ class Operation extends React.Component {
                 open = true;
                 buttonMessage = 'Sit here';
                 break
-            case operation === OPERATION_TYPE.SEE && playerId !== id:
+            case operation === OPERATION_TYPE.SEE && playerId !== seatId:
                 open = true;
                 buttonMessage = 'See';
                 break
@@ -99,48 +97,18 @@ class Operation extends React.Component {
                 break
         }
 
-        // let {
-        //     open,
-        //     skillUsed,
-        //     buttonMessage
-        // } = this.state;
-        // if (playerId === null && !prepared) {
-        //     buttonMessage = 'Sit here';
-        // }
-        // else if (!skillUsed) {
-        //     switch (true) {
-        //         case role === ROLE.WEREWOLF && gameStatus === GAMESTATUS.START:
-        //             buttonMessage = 'Kill';
-        //             break
-        //         case role === ROLE.SEER
-        //             && gameStatus === GAMESTATUS.SEER_MOVE
-        //             && playerId !== id:
-        //             buttonMessage = 'See';
-        //             break
-        //         case role === ROLE.WITCH && GAMESTATUS.WITCH_MOVE:
-        //             if (status == PLAYERSTATUS.DEAD) {
-        //                 buttonMessage = 'Save';
-        //             }
-        //             else {
-        //                 buttonMessage = 'Poison';
-        //             }
-        //             break
-        //         default:
-        //             return null
-        //     }
-        // }
-        // else {
-        //     return null
-        // }
         return (
-            open ? 
-            <CardActions>
-                <Button size="small" onClick={this.handleOperationButtonClick}>
-                    {buttonMessage}
-                </Button>
-            </CardActions>
-            :
-            null
+            open ?
+                <CardActions>
+                    <Button
+                        size="small"
+                        variant="contained"
+                        onClick={this.handleOperationButtonClick}>
+                        {buttonMessage}
+                    </Button>
+                </CardActions>
+                :
+                null
         )
     }
 }
