@@ -1,6 +1,6 @@
 import React from 'react';
 import Sound from 'react-sound';
-import Sound1 from '../sound/1.mp3';
+import howlSound from '../sound/howl.mp3';
 import GAMESTATUS from '../gameStatus';
 
 export default class SoundCompoent extends React.Component {
@@ -10,7 +10,7 @@ export default class SoundCompoent extends React.Component {
         switch (gameStatus) {
             case GAMESTATUS.START:
                 return <Sound
-                    url={Sound1}
+                    url={howlSound}
                     playStatus={Sound.status.PLAYING} />
             default:
                 return null

@@ -151,8 +151,8 @@ export default class App extends React.Component {
                     roomId={roomId}
                     operation={operation}
                     handleOperationButtonClick={this.handleOperationButtonClick} />
-                {/* <SoundCompoent
-                    gameStatus={gameStatus} /> */}
+                <SoundCompoent
+                    gameStatus={gameStatus} />
                 <Snackbar
                     anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                     open={snackbarOpen}
