@@ -36,7 +36,7 @@ function shuffle(a) {
     return a;
 }
 
-function shuffled_roles() {
+function shuffled_roles(roles) {
     return shuffle(roles);
 }
 
@@ -62,12 +62,23 @@ function initPlayers(n) {
     return emptyPlayers
 }
 
-function initRoom(rooms, roomId) {
+function initRoles(numWerewolf, numVillager) {
+    let roles = [ROLE.SEER, ROLE.WITCH, ROLE.HUNTER, ROLE.IDIOT]
+    for (let i = 0; i < numWerewolf; i++) {
+        roles.push(ROLE.WEREWOLF);
+    }
+    for (let i = 0; i < numVillager; i++) {
+        roles.push(ROLE.VILLAGER);
+    }
+    return roles;
+}
 
-    let emptyPlayers = initPlayers(6);
+function initRoom(rooms, roomId, roles) {
+    let num = roles.length;
+    let emptyPlayers = initPlayers(num);
     rooms[roomId] = {
         players: emptyPlayers,
-        roles: shuffled_roles(),
+        roles: shuffle(roles),
         status: GAMESTATUS.PREPARING
     }
 }
@@ -76,6 +87,11 @@ function joinRoom(roomId) {
     if (!(roomId in rooms)) {
         initRoom(rooms, roomId);
     }
+}
+
+function createRoom(roomId, numWerewolf, numVillager) {
+    let roles = initRoles(numWerewolf, numVillager);
+    initRoom(rooms, roomId, roles);
 }
 
 function sit(roomId, playerId, name, whatsup) {
@@ -113,6 +129,7 @@ module.exports = {
     initPlayers,
     removePlayer,
     joinRoom,
+    createRoom,
     sit,
     killPlayer,
     savePlayer,

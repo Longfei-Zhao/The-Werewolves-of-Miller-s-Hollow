@@ -28,6 +28,18 @@ io.on('connection', socket => {
         // socket.emit('updatePlayers', util.getPlayers(roomId));
     })
 
+    socket.on('createRoom', (roomId, name, whatsup, numWerewolf, numVillager) => {
+        socket.roomId = roomId;
+        socket.name = name;
+        socket.whatsup = whatsup;
+        util.createRoom(roomId, numWerewolf, numVillager);
+        console.log('User ' + chalk.blue(userId) + ' name is ' + chalk.blue(name));
+        socket.join(roomId, () => {
+            console.log('User ' + chalk.blue(name) + ' Creates room ' + chalk.green(roomId))
+        });
+        socket.emit('updateRoomInfo', util.getRoom(roomId))
+    })
+
     socket.on('sit', (playerId) => {
         socket.playerId = playerId;
         console.log(chalk.blue(socket.name) + ' choose the position ' + chalk.green(playerId))

@@ -63,6 +63,14 @@ export default class App extends React.Component {
         })
     }
 
+    handleCreateRoomButton = (roomId, name, whatsup, numWerewolf, numVillager) => {
+        socket.emit('createRoom', roomId, name, whatsup, numWerewolf, numVillager)
+        this.setState({
+            userInfoDialogOpen: false,
+            roomId
+        })
+    }
+
     handleRoleButtonClick = () => {
         this.setState({
 
@@ -144,6 +152,7 @@ export default class App extends React.Component {
                     onClose={() => this.setState({ roleDialogOpen: false })} />
                 <UserInfoDialog
                     open={userInfoDialogOpen}
+                    handleCreateRoomButton={this.handleCreateRoomButton}
                     handleJoinRoomButton={this.handleJoinRoomButton} />
                 <GameBoard
                     playerId={playerId}

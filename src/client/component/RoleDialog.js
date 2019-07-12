@@ -27,7 +27,7 @@ export default class RoleDialog extends React.Component {
                 src = ROLE_IMAGE.VILLAGER;
                 break;
         }
-        console.log(src)
+        
         return (
             <Dialog
                 open={this.props.open}
