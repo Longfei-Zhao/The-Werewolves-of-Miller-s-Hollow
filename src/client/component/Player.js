@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Operation from './Operation';
 import '../css/common.css';
 import bloodImg from '../image/blood.png';
-import { PLAYERSTATUS } from '../util';
+import { PLAYERSTATUS, OPERATION_TYPE } from '../util';
 
 class Player extends React.Component {
 
@@ -34,7 +34,7 @@ class Player extends React.Component {
                 variant="contained"
                 color="default">
                 {
-                    status === PLAYERSTATUS.DEAD &&
+                    status === PLAYERSTATUS.DEAD && operation !== OPERATION_TYPE.SEE &&
                     <img className='dead' src={bloodImg} />
                 }
                 <CardContent className='cardContent'>
