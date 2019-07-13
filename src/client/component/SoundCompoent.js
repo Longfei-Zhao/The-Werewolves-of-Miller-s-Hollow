@@ -5,13 +5,15 @@ import startSound from '../sound/2.mp3';
 import seerSound from '../sound/seerSound.mp3';
 import witchSound from '../sound/witchSound.mp3';
 import finishSound from '../sound/finishSound.mp3';
-import GAMESTATUS from '../gameStatus';
+import { GAMESTATUS } from '../util';
 
 
 // eslint-disable-next-line react/prefer-stateless-function
 export default class SoundCompoent extends React.Component {
 
   render() {
+    const { gameStatus } = this.props;
+
     switch (gameStatus) {
       case GAMESTATUS.START:
         return (
